@@ -15,7 +15,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // Hazırda daxil olmuş istifadəçinin profili
+    // Hazırda daxil olmuş istifadeçinin profili
     public UserResponseDto getMyProfile() {
         User user = getCurrentUser();
         return toResponse(user);
