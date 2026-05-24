@@ -25,3 +25,5 @@ jwt:
 
 upload:
   dir: ${UPLOAD_DIR:uploads}
+
+kind: Application
