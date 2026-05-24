@@ -1,6 +1,6 @@
 package az.myapp.retroride.controller;
 
-import az.myapp.retroride.dao.utility.User;
+import az.myapp.retroride.dao.entity.User;
 import az.myapp.retroride.dto.response.UserResponseDto;
 import az.myapp.retroride.service.UserService;
 import lombok.RequiredArgsConstructor;

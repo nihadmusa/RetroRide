@@ -1,6 +1,6 @@
 package az.myapp.retroride.dao.repository;
 
-import az.myapp.retroride.dao.utility.User;
+import az.myapp.retroride.dao.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

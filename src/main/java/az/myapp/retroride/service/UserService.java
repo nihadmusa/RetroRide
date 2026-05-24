@@ -1,7 +1,7 @@
 package az.myapp.retroride.service;
 
 import az.myapp.retroride.dao.repository.UserRepository;
-import az.myapp.retroride.dao.utility.User;
+import az.myapp.retroride.dao.entity.User;
 import az.myapp.retroride.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

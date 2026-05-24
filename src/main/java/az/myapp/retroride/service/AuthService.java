@@ -2,12 +2,9 @@ package az.myapp.retroride.service;
 
 import az.myapp.retroride.config.JwtUtil;
 import az.myapp.retroride.dao.repository.UserRepository;
-import az.myapp.retroride.dao.utility.User;
-import az.myapp.retroride.dto.request.LoginRequestDto;
+import az.myapp.retroride.dao.entity.User;
 import az.myapp.retroride.dto.request.LoginRequestDto;
 import az.myapp.retroride.dto.request.RegisterRequestDto;
-import az.myapp.retroride.dto.request.RegisterRequestDto;
-import az.myapp.retroride.dto.response.AuthResponseDto;
 import az.myapp.retroride.dto.response.AuthResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package az.myapp.retroride.dao.utility;
+package az.myapp.retroride.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
