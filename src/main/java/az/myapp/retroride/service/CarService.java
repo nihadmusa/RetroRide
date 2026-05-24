@@ -1,15 +1,21 @@
 package az.myapp.retroride.service;
 
+import az.myapp.retroride.dao.repository.CarImageRepository;
 import az.myapp.retroride.dao.repository.CarRepository;
 import az.myapp.retroride.dao.utility.Car;
+import az.myapp.retroride.dao.utility.CarImage;
 import az.myapp.retroride.dao.utility.User;
 import az.myapp.retroride.dto.request.CarRequestDto;
 import az.myapp.retroride.dto.response.CarResponseDto;
 import az.myapp.retroride.dto.response.CarResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +24,14 @@ import java.util.stream.Collectors;
 public class CarService {
 
     private final CarRepository carRepository;
+    private final CarImageRepository carImageRepository;
+    private final CarImageService carImageService;
+
+
 
 
     public List<CarResponseDto> getAllActiveCars() {
-        return carRepository.findByStatus(Car.CarStatus.ACTIVE)
+        return carRepository.findByStatusOrderByCreatedAtDesc(Car.CarStatus.ACTIVE)
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
@@ -82,6 +92,14 @@ public class CarService {
     public void deleteCar(Long id) {
         Car car = findCarOrThrow(id);
         checkOwnership(car);
+
+        List<CarImage> images = carImageRepository.findByCarIdOrderBySortOrderAsc(id);
+        for (CarImage image : images) {
+            try {
+                carImageService.deleteImage(image.getId());
+            } catch (Exception ignored) {}
+        }
+
         carRepository.delete(car);
     }
 

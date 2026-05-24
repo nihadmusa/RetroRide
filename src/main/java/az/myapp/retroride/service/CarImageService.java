@@ -74,12 +74,14 @@ public class CarImageService {
 
 
     public List<Map<String, Object>> getImageUrls(Long carId) {
+
         return carImageRepository.findByCarIdOrderBySortOrderAsc(carId)
                 .stream()
                 .map(img -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", img.getId());
-                    map.put("url", "/api/images/" + img.getFileName());
+                    String fn = img.getFileName();
+                    map.put("url", fn.startsWith("http") ? fn : "/api/images/" + fn);
                     return map;
                 })
                 .toList();
