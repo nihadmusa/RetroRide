@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: admin
-    password: 123four
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:123four}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -20,12 +20,8 @@ spring:
       max-request-size: 50MB
 
 jwt:
-  secret: retroride-super-secret-key-must-be-at-least-256-bits!!
-  expiration: 604800000
-
+  secret: ${JWT_SECRET:retroride-super-secret-key-must-be-at-least-256-bits!!}
+  expiration: ${JWT_EXPIRATION:604800000}
 
 upload:
-  dir: uploads
-
-
-
+  dir: ${UPLOAD_DIR:uploads}
