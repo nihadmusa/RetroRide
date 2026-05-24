@@ -2,9 +2,9 @@ package az.myapp.retroride.service;
 
 import az.myapp.retroride.dao.repository.CarImageRepository;
 import az.myapp.retroride.dao.repository.CarRepository;
-import az.myapp.retroride.dao.utility.Car;
-import az.myapp.retroride.dao.utility.CarImage;
-import az.myapp.retroride.dao.utility.User;
+import az.myapp.retroride.dao.entity.Car;
+import az.myapp.retroride.dao.entity.CarImage;
+import az.myapp.retroride.dao.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;

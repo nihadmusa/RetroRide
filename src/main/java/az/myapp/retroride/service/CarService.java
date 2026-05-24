@@ -2,20 +2,15 @@ package az.myapp.retroride.service;
 
 import az.myapp.retroride.dao.repository.CarImageRepository;
 import az.myapp.retroride.dao.repository.CarRepository;
-import az.myapp.retroride.dao.utility.Car;
-import az.myapp.retroride.dao.utility.CarImage;
-import az.myapp.retroride.dao.utility.User;
+import az.myapp.retroride.dao.entity.Car;
+import az.myapp.retroride.dao.entity.CarImage;
+import az.myapp.retroride.dao.entity.User;
 import az.myapp.retroride.dto.request.CarRequestDto;
 import az.myapp.retroride.dto.response.CarResponseDto;
-import az.myapp.retroride.dto.response.CarResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
