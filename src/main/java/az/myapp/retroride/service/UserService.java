@@ -15,13 +15,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // Hazırda daxil olmuş istifadeçinin profili
+
     public UserResponseDto getMyProfile() {
         User user = getCurrentUser();
         return toResponse(user);
     }
 
-    // Profili yenilə (ad, telefon)
+
     public UserResponseDto updateMyProfile(String name, String phone) {
         User user = getCurrentUser();
         user.setName(name);
@@ -30,20 +30,14 @@ public class UserService {
         return toResponse(user);
     }
 
-    // -----------------------------------------------
-    // Köməkçi metodlar
-    // -----------------------------------------------
 
-    // SecurityContext-dən hazırki istifadəçini al
-    // JwtAuthFilter bu məlumatı hər sorğuda oraya yazır
     private User getCurrentUser() {
         return (User) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
     }
 
-    // User entity-ni UserResponse DTO-ya çevir
-    // Niyə? — Şifrəni frontend-ə göndərməmək üçün
+
     private UserResponseDto toResponse(User user) {
         return new UserResponseDto(
                 user.getId(),

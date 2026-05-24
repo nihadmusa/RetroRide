@@ -66,7 +66,7 @@ public class CarImageService {
         CarImage image = CarImage.builder()
                 .car(car)
                 .fileName(fileName)
-                .sortOrder(currentCount) // növbəti sıra
+                .sortOrder(currentCount)
                 .build();
 
         return carImageRepository.save(image);
@@ -100,7 +100,7 @@ public class CarImageService {
         carImageRepository.delete(image);
     }
 
-    //  bu elan bu istifadecinindi?
+
     private void checkOwnership(Car car) {
         User currentUser = (User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();

@@ -25,7 +25,7 @@ public class CarResponseDto {
     private String status;           //enum
     private LocalDateTime createdAt;
 
-    // owner infos (User entity-sinden)
+    // owner infos
     private String ownerName;
     private String ownerPhone;
 }

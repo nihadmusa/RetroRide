@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface CarRepository
         extends JpaRepository<Car,Long> {
-    // Aktiv elanları getir — main sehifeycun
+
     List<Car> findByStatus(Car.CarStatus status);
 
-    // userlerin elanları — profil üçün
+
     List<Car> findByUserId(Long userId);
 
-    // Marka axtarış — search ucun
+
     List<Car> findByBrandContainingIgnoreCase(String brand);
 }

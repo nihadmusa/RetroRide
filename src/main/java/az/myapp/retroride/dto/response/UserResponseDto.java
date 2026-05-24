@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-// Profil melumatlarini frontend-e gonderirik amma sifre getmir
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

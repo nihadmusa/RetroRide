@@ -19,7 +19,7 @@ public class CarService {
 
     private final CarRepository carRepository;
 
-    // Bütün aktiv elanlar — ana səhifə
+
     public List<CarResponseDto> getAllActiveCars() {
         return carRepository.findByStatus(Car.CarStatus.ACTIVE)
                 .stream()
@@ -27,13 +27,13 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Bir elanın detalları
+
     public CarResponseDto getCarById(Long id) {
         Car car = findCarOrThrow(id);
         return toResponse(car);
     }
 
-    // Mənim elanlarım
+
     public List<CarResponseDto> getMyCars() {
         User user = getCurrentUser();
         return carRepository.findByUserId(user.getId())
@@ -42,7 +42,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Yeni elan yarat
+
     public CarResponseDto createCar(CarRequestDto request) {
         User user = getCurrentUser();
 
@@ -62,7 +62,6 @@ public class CarService {
         return toResponse(carRepository.save(car));
     }
 
-    // Elanı yenilə — yalnız öz elanın
     public CarResponseDto updateCar(Long id, CarRequestDto request) {
         Car car = findCarOrThrow(id);
         checkOwnership(car);
@@ -79,7 +78,7 @@ public class CarService {
         return toResponse(carRepository.save(car));
     }
 
-    // Elanı sil — yalnız öz elanın
+
     public void deleteCar(Long id) {
         Car car = findCarOrThrow(id);
         checkOwnership(car);
@@ -104,7 +103,7 @@ public class CarService {
                 .getPrincipal();
     }
 
-    // Car entity → CarResponse DTO
+
     private CarResponseDto toResponse(Car car) {
         return new CarResponseDto(
                 car.getId(),

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//login/regirter ugurlu olduqda front end e bu qayidir
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

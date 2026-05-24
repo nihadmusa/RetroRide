@@ -21,7 +21,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    // Token yarat — login/register zamanı çağırılır
+
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())   // email
@@ -31,13 +31,13 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Token düzgündürmü?
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String email = extractEmail(token);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    // Tokendən email-i oxu
+
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }

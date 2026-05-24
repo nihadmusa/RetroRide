@@ -23,7 +23,7 @@ public class AuthController {
             AuthResponseDto response = authService.register(request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            // Xəta olduqda frontend-ə JSON formatında qaytarırıq
+
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }

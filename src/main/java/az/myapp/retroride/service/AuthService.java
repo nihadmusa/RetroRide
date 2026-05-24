@@ -25,12 +25,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponseDto register(RegisterRequestDto request) {
-        // Email mövcuddurmu?
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Bu email artıq qeydiyyatdan keçib");
         }
 
-        // İstifadəçi yarat — şifrəni mütləq hash-lə!
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -45,8 +45,7 @@ public class AuthService {
     }
 
     public AuthResponseDto login(LoginRequestDto request) {
-        // Bu metod email + şifrəni yoxlayır
-        // Yanlışdırsa avtomatik exception atır
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

@@ -26,8 +26,7 @@ public class CarImageController {
     @Value("${upload.dir:uploads}")
     private String uploadDir;
 
-    // POST /api/cars/5/images — şəkil yüklə
-    // multipart/form-data ilə göndərilir — form-dan fayl seçəndə belə olur
+
     @PostMapping("/api/cars/{carId}/images")
     public ResponseEntity<Map<String, String>> uploadImage(
             @PathVariable Long carId,
@@ -44,13 +43,13 @@ public class CarImageController {
         }
     }
 
-    // GET /api/cars/5/images — maşının şəkil URL-lərini gətir
+
     @GetMapping("/api/cars/{carId}/images")
     public ResponseEntity<List<Map<String, Object>>> getImages(@PathVariable Long carId) {
         return ResponseEntity.ok(carImageService.getImageUrls(carId));
     }
 
-    // DELETE /api/images/{imageId} — şəkili sil
+
     @DeleteMapping("/api/images/{imageId}")
     public ResponseEntity<Map<String, String>> deleteImage(@PathVariable Long imageId) {
         try {
@@ -65,7 +64,7 @@ public class CarImageController {
         }
     }
 
-    // GET /api/images/abc123.jpg — şəkili göstər (brauzerdə açılır)
+
     @GetMapping("/api/images/{fileName}")
     public ResponseEntity<Resource> serveImage(@PathVariable String fileName) {
         try {
@@ -76,7 +75,6 @@ public class CarImageController {
                 return ResponseEntity.notFound().build();
             }
 
-            // Fayl növünə görə content type təyin et
             String contentType = "image/jpeg";
             if (fileName.endsWith(".png"))  contentType = "image/png";
             if (fileName.endsWith(".webp")) contentType = "image/webp";

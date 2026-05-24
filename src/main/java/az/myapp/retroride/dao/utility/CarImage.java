@@ -18,16 +18,16 @@ public class CarImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Hansı maşına aid olduğu
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    // Şəkil DB-də saxlanılır (base64 deyil, fayl olaraq)
+
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    // Neçənci şəkil olduğu — sıralama üçün
+
     @Column(name = "sort_order")
     private Integer sortOrder = 0;
 }

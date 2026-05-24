@@ -15,8 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// Bu filter hər HTTP sorğusundan ƏVVƏL işləyir
-// Header-də "Authorization: Bearer TOKEN" varsa yoxlayır
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -32,13 +30,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        // Header yoxdursa — keç, bu açıq endpoint-dir
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // "Bearer " hissəsini kəs, yalnız token-i al
         String token = authHeader.substring(7);
         String email = jwtUtil.extractEmail(token);
 
@@ -46,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             if (jwtUtil.isTokenValid(token, userDetails)) {
-                // Token keçərlidir — istifadəçini "giriş etmiş" kimi qeyd et
+
                 var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
