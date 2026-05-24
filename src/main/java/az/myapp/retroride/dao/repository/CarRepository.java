@@ -8,7 +8,7 @@ import java.util.List;
 public interface CarRepository
         extends JpaRepository<Car,Long> {
 
-    List<Car> findByStatus(Car.CarStatus status);
+    List<Car> findByStatusOrderByCreatedAtDesc(Car.CarStatus status);
 
 
     List<Car> findByUserId(Long userId);
