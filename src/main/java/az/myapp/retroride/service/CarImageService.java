@@ -1,80 +1,74 @@
 package az.myapp.retroride.service;
 
 import az.myapp.retroride.dao.repository.CarImageRepository;
-import az.myapp.retroride.dao.repository.CarRepository;
-import az.myapp.retroride.dao.entity.Car;
 import az.myapp.retroride.dao.entity.CarImage;
-import az.myapp.retroride.dao.entity.User;
+import az.myapp.retroride.dao.entity.Car;
+import az.myapp.retroride.dao.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.HashMap;
+
 @Service
 @RequiredArgsConstructor
 public class CarImageService {
 
     private final CarImageRepository carImageRepository;
     private final CarRepository carRepository;
+    private final S3Client s3Client;
 
-    @Value("${upload.dir:uploads}")
-    private String uploadDir;
+    @Value("${aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${aws.s3.region}")
+    private String region;
 
     public CarImage uploadImage(Long carId, MultipartFile file) throws IOException {
-
-
         Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new RuntimeException("Elan tapılmadı"));
+                .orElseThrow(() -> new RuntimeException("Car not found"));
 
-        checkOwnership(car);
-
-
-        int currentCount = carImageRepository.countByCarId(carId);
-        if (currentCount >= 5) {
-            throw new RuntimeException("Maksimum 5 şəkil yükləyə bilərsiniz");
+        String ext = "";
+        String original = file.getOriginalFilename();
+        if (original != null && original.contains(".")) {
+            ext = original.substring(original.lastIndexOf("."));
         }
 
+        String key = "images/" + UUID.randomUUID() + ext;
 
-        String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new RuntimeException("Yalnız şəkil faylı yükləyə bilərsiniz");
-        }
+        // S3-ə yüklə
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .contentType(file.getContentType())
+                .build();
 
+        s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
 
-        String originalName = file.getOriginalFilename();
-        String extension = originalName != null && originalName.contains(".")
-                ? originalName.substring(originalName.lastIndexOf("."))
-                : ".jpg";
-        String fileName = UUID.randomUUID() + extension;
+        // S3 URL
+        String url = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
 
-
-        Path uploadPath = Paths.get(uploadDir);
-        Files.createDirectories(uploadPath);
-
-
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
+        int order = carImageRepository.findByCarIdOrderBySortOrderAsc(carId).size();
 
         CarImage image = CarImage.builder()
                 .car(car)
-                .fileName(fileName)
-                .sortOrder(currentCount)
+                .fileName(url)
+                .sortOrder(order)
                 .build();
 
         return carImageRepository.save(image);
     }
 
-
     public List<Map<String, Object>> getImageUrls(Long carId) {
-
         return carImageRepository.findByCarIdOrderBySortOrderAsc(carId)
                 .stream()
                 .map(img -> {
@@ -87,27 +81,21 @@ public class CarImageService {
                 .toList();
     }
 
-
-    public void deleteImage(Long imageId) throws IOException {
+    public void deleteImage(Long imageId) {
         CarImage image = carImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("Şəkil tapılmadı"));
+                .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        checkOwnership(image.getCar());
+        String fileName = image.getFileName();
 
-
-        Path filePath = Paths.get(uploadDir).resolve(image.getFileName());
-        Files.deleteIfExists(filePath);
-
+        // S3-dən sil
+        if (fileName.startsWith("http")) {
+            String key = fileName.substring(fileName.indexOf("images/"));
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build());
+        }
 
         carImageRepository.delete(image);
-    }
-
-
-    private void checkOwnership(Car car) {
-        User currentUser = (User) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        if (!car.getUser().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Bu elan sizin deyil");
-        }
     }
 }
